@@ -87,8 +87,8 @@ ${exportedFunction}
     def get(`type`: Companion): Companion.Accessor
   }
 
-  protected type TermCompanion <: TermCompanionApi
-  protected trait TermCompanionApi {
+  protected type ExpressionCompanion <: ExpressionCompanionApi
+  protected trait ExpressionCompanionApi {
 
     final case class Code(globalDeclarations: Fastring = Fastring.empty,
                           globalDefinitions: Fastring = Fastring.empty,

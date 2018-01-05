@@ -61,12 +61,12 @@ trait Expressions extends Debugging {
   type Expression <: (Named with Any) with ExpressionApi
 
   /** @template */
-  protected type TermCompanion <: AnyRef
+  protected type ExpressionCompanion <: AnyRef
 
   @inject
-  protected def TermCompanion(): Implicitly[TermCompanion]
+  protected def ExpressionCompanion(): Implicitly[ExpressionCompanion]
 
-  val Expression: TermCompanion = TermCompanion()
+  val Expression: ExpressionCompanion = ExpressionCompanion()
 
   protected trait CompanionApi extends NamedApi { this: Companion =>
 
