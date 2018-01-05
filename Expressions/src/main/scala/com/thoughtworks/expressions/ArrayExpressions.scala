@@ -19,42 +19,42 @@ trait ArrayExpressions extends BooleanExpressions {
       val operand0: Seq[Int]
       def shape: Seq[Int] = operand0
 
-      protected trait TypedTermApi extends TermApi with ArrayCompanionApi.super.TypedTermApi {
-        this: TypedTerm =>
-        def isOutOfBound: BooleanTerm = ???
+      protected trait TypedExpressionApi extends ExpressionApi with ArrayCompanionApi.super.TypedExpressionApi {
+        this: TypedExpression =>
+        def isOutOfBound: BooleanExpression = ???
 
-        def extract(implicit debuggingInformation: Implicitly[DebuggingInformation]): elementCompanion.TypedTerm = {
+        def extract(implicit debuggingInformation: Implicitly[DebuggingInformation]): elementCompanion.TypedExpression = {
           Extract(this)
         }
 
       }
 
-      type TypedTerm <: (ArrayTerm with Any) with TypedTermApi
+      type TypedExpression <: (ArrayExpression with Any) with TypedExpressionApi
 
       protected trait ExtractApi {
-        val operand0: TypedTerm
+        val operand0: TypedExpression
       }
 
-      type Extract <: elementCompanion.TypedTerm with ExtractApi
+      type Extract <: elementCompanion.TypedExpression with ExtractApi
 
       @inject
-      def Extract: Operator1[TypedTerm, Extract]
+      def Extract: Operator1[TypedExpression, Extract]
 
 //      FIXME: Transform 的类型应该怎么定义
 //      trait TransformApi { this: Transform =>
-//        val operand0: ArrayTerm
+//        val operand0: ArrayExpression
 //        val operand1: Array[Array[Int]]
 //      }
 //
-//      type Transform <: TypedTerm with TransformApi
+//      type Transform <: TypedExpression with TransformApi
 //      @inject
-//      def Transform: Operator2[ArrayTerm, Array[Array[Int]], Transform]
+//      def Transform: Operator2[ArrayExpression, Array[Array[Int]], Transform]
 
     }
 
-    trait ArrayTermApi {}
+    trait ArrayExpressionApi {}
 
-    type ArrayTerm <: (Term with Any) with ArrayTermApi
+    type ArrayExpression <: (Expression with Any) with ArrayExpressionApi
 
     /** @template */
     type ArrayCompanion <: (Companion with Any) with ArrayCompanionApi

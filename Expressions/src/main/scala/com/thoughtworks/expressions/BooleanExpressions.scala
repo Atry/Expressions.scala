@@ -18,7 +18,7 @@ trait BooleanExpressions extends ValueExpressions {
   @inject
   protected def BooleanCompanion: Factory1[DebuggingInformation, BooleanCompanion]
 
-  type BooleanTerm = boolean.TypedTerm
+  type BooleanExpression = boolean.TypedExpression
 
   val boolean: BooleanCompanion = BooleanCompanion.newInstance(debuggingInformation)
 }

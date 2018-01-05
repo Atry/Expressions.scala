@@ -22,7 +22,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
 
   def generateOpenCLKernelSourceCode[NumberOfDimensions <: Nat](functionName: String,
                                                                 parameters: Seq[Parameter],
-                                                                rhs: Term): Fastring = {
+                                                                rhs: Expression): Fastring = {
 
     val globalDeclarations = mutable.Buffer.empty[Fastring]
     val globalDefinitions = mutable.Buffer.empty[Fastring]
@@ -32,7 +32,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
 
       val localDefinitions = mutable.Buffer.empty[Fastring]
 
-      val expressionCodeCache = new IdentityHashMap[Term, Term.Accessor]().asScala
+      val expressionCodeCache = new IdentityHashMap[Expression, Expression.Accessor]().asScala
       val functionContext = new Context {
 
         override def get(`type`: Companion): Companion.Accessor = {
@@ -44,7 +44,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
           })
         }
 
-        override def get(expression: Term): Term.Accessor = {
+        override def get(expression: Expression): Expression.Accessor = {
           expressionCodeCache.getOrElseUpdate(
             expression, {
               val code = expression.toCode(this)
@@ -83,7 +83,7 @@ ${exportedFunction}
   }
 
   trait Context {
-    def get(term: Term): Term.Accessor
+    def get(term: Expression): Expression.Accessor
     def get(`type`: Companion): Companion.Accessor
   }
 
@@ -127,11 +127,11 @@ ${exportedFunction}
     }
   }
 
-  protected trait TermApi extends ExpressionApi with super.TermApi {
-    def toCode(context: Context): Term.Code
+  protected trait ExpressionApi extends NamedApi with super.ExpressionApi {
+    def toCode(context: Context): Expression.Code
   }
 
-  type Term <: (Expression with Any) with TermApi
+  type Expression <: (Named with Any) with ExpressionApi
 
   protected trait TypeCompanionApi {
 
@@ -168,23 +168,23 @@ ${exportedFunction}
 
     def toCode(context: Context): Companion.Code
 
-    protected trait TypedTermApi extends TermApi with super.TypedTermApi {}
+    protected trait TypedExpressionApi extends ExpressionApi with super.TypedExpressionApi {}
 
     /** @template */
-    type TypedTerm <: (Term with Any) with TypedTermApi
+    type TypedExpression <: (Expression with Any) with TypedExpressionApi
 
-    protected trait IdentifierApi extends Parameter with TermApi { this: Identifier =>
+    protected trait IdentifierApi extends Parameter with ExpressionApi { this: Identifier =>
       // TODO:
 
-      def toCode(context: Context): Term.Code = {
-        Term.Code(accessor = Term.Accessor.Packed(fast"$name", context.get(`type`).unpacked.length))
+      def toCode(context: Context): Expression.Code = {
+        Expression.Code(accessor = Expression.Accessor.Packed(fast"$name", context.get(`type`).unpacked.length))
       }
     }
 
-    type Identifier <: (TypedTerm with Any) with IdentifierApi
+    type Identifier <: (TypedExpression with Any) with IdentifierApi
 
   }
 
-  type Companion <: (Expression with Any) with CompanionApi
+  type Companion <: (Named with Any) with CompanionApi
 
 }

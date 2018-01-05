@@ -53,12 +53,12 @@ trait Expressions extends Debugging {
         implicit debuggingInformation: Implicitly[DebuggingInformation]): Out
   }
 
-  protected trait TermApi {
+  protected trait ExpressionApi {
     val `type`: Companion
   }
 
   /** @template */
-  type Term <: (Expression with Any) with TermApi
+  type Expression <: (Named with Any) with ExpressionApi
 
   /** @template */
   protected type TermCompanion <: AnyRef
@@ -66,18 +66,18 @@ trait Expressions extends Debugging {
   @inject
   protected def TermCompanion(): Implicitly[TermCompanion]
 
-  val Term: TermCompanion = TermCompanion()
+  val Expression: TermCompanion = TermCompanion()
 
-  protected trait CompanionApi extends ExpressionApi { this: Companion =>
+  protected trait CompanionApi extends NamedApi { this: Companion =>
 
-    protected trait TypedTermApi extends TermApi {
+    protected trait TypedExpressionApi extends ExpressionApi {
       val `type`: CompanionApi.this.type = CompanionApi.this
     }
 
-    type TypedTerm <: (Term with Any) with TypedTermApi
+    type TypedExpression <: (Expression with Any) with TypedExpressionApi
 
     /** @template */
-    type Identifier <: TypedTerm
+    type Identifier <: TypedExpression
 
     // FIXME: Some identifiers need additional settings,
     // so the arity may be not nullary,
@@ -88,7 +88,7 @@ trait Expressions extends Debugging {
   }
 
   /** @template */
-  type Companion <: (Expression with Any) with CompanionApi // TODO: Rename to Companion
+  type Companion <: (Named with Any) with CompanionApi // TODO: Rename to Companion
 
   /** @template */
   protected type TypeCompanion <: AnyRef // TODO: Rename to TypeCompanion

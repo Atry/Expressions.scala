@@ -6,6 +6,7 @@ import java.util.concurrent.atomic.AtomicInteger
   * @author 杨博 (Yang Bo)
   */
 trait FreshNames extends Debugging {
+  // FIXME: Remove this plugin. `freshName` function should be provided by the OpenCL Context.
 
   protected val freshNameSeed = new AtomicInteger()
 
@@ -15,11 +16,11 @@ trait FreshNames extends Debugging {
 
   }
 
-  protected trait ExpressionApi extends super.ExpressionApi {
+  protected trait NamedApi extends super.NamedApi {
     private lazy val _name: String = freshName(super.name)
     override def name: String = _name
   }
 
-  type Expression <: ExpressionApi
+  type Named <: NamedApi
 
 }

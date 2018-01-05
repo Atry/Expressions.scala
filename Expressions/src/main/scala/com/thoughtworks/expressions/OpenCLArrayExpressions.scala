@@ -49,7 +49,7 @@ trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressi
 
   }
 
-  type Companion <: (Expression with Any) with CompanionApi
+  type Companion <: (Named with Any) with CompanionApi
   protected trait ValueCompanionApi extends CompanionApi with super.ValueCompanionApi { elementCompanion: ValueCompanion =>
 
     protected trait ArrayCompanionApi
@@ -66,25 +66,25 @@ trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressi
         )
       }
 
-      protected trait TypedTermApi extends ArrayTermApi with super[CompanionApi].TypedTermApi with super[ArrayCompanionApi].TypedTermApi {
-        this: TypedTerm =>
+      protected trait TypedExpressionApi extends ArrayExpressionApi with super[CompanionApi].TypedExpressionApi with super[ArrayCompanionApi].TypedExpressionApi {
+        this: TypedExpression =>
 //        def matrix: TransformationMatrix
       }
 
-      type TypedTerm <: (ArrayTerm with Any) with TypedTermApi
+      type TypedExpression <: (ArrayExpression with Any) with TypedExpressionApi
 
-      protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedTermApi {
-        this: elementCompanion.TypedTerm =>
-        def toCode(context: Context): Term.Code = ???
+      protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedExpressionApi {
+        this: elementCompanion.TypedExpression =>
+        def toCode(context: Context): Expression.Code = ???
       }
 
-      type Extract <: (elementCompanion.TypedTerm with Any) with ExtractApi
+      type Extract <: (elementCompanion.TypedExpression with Any) with ExtractApi
 
-      protected trait IdentifierApi extends super.IdentifierApi with TypedTermApi { this: Identifier =>
+      protected trait IdentifierApi extends super.IdentifierApi with TypedExpressionApi { this: Identifier =>
 //        def matrix: TransformationMatrix = TransformationMatrix.identity
       }
 
-      type Identifier <: (TypedTerm with Any) with IdentifierApi
+      type Identifier <: (TypedExpression with Any) with IdentifierApi
 
     }
 

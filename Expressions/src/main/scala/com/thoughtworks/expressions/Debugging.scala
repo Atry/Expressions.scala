@@ -29,9 +29,9 @@ trait Debugging {
   val debuggingInformation: Implicitly[DebuggingInformation]
 
   type DebuggingInformation <: Debugging.Name
-  protected trait ExpressionApi {
+  protected trait NamedApi {
     val debuggingInformation: DebuggingInformation
     def name: String = debuggingInformation.name.value
   }
-  type Expression <: ExpressionApi
+  type Named <: NamedApi
 }

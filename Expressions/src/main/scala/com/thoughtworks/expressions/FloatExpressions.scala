@@ -20,6 +20,6 @@ trait FloatExpressions extends ValueExpressions {
 
   val float: FloatCompanion = FloatCompanion.newInstance(debuggingInformation)
 
-  type FloatTerm = float.TypedTerm
+  type FloatExpression = float.TypedExpression
 
 }
