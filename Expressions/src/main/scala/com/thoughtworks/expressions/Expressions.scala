@@ -66,7 +66,7 @@ trait Expressions {
   type Expression <: ExpressionApi
 
   protected trait TermApi {
-    val `type`: Type
+    val `type`: Companion
   }
 
   /** @template */
@@ -80,10 +80,10 @@ trait Expressions {
 
   val Term: TermCompanion = TermCompanion()
 
-  protected trait TypeApi extends ExpressionApi { this: Type =>
+  protected trait CompanionApi extends ExpressionApi { this: Companion =>
 
     protected trait TypedTermApi extends TermApi {
-      val `type`: TypeApi.this.type = TypeApi.this
+      val `type`: CompanionApi.this.type = CompanionApi.this
     }
 
     type TypedTerm <: (Term with Any) with TypedTermApi
@@ -100,7 +100,7 @@ trait Expressions {
   }
 
   /** @template */
-  type Type <: (Expression with Any) with TypeApi // TODO: Rename to Type
+  type Companion <: (Expression with Any) with CompanionApi // TODO: Rename to Companion
 
   /** @template */
   protected type TypeCompanion <: AnyRef // TODO: Rename to TypeCompanion
@@ -108,6 +108,6 @@ trait Expressions {
   @inject
   protected def TypeCompanion(): Implicitly[TypeCompanion]
 
-  val Type: TypeCompanion = TypeCompanion()
+  val Companion: TypeCompanion = TypeCompanion()
 
 }

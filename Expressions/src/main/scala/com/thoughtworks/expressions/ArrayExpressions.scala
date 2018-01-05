@@ -11,19 +11,19 @@ import scala.language.higherKinds
   */
 trait ArrayExpressions extends BooleanExpressions {
 
-  protected trait ValueTypeApi extends super.ValueTypeApi { elementType: ValueType =>
+  protected trait ValueCompanionApi extends super.ValueCompanionApi { elementCompanion: ValueCompanion =>
 
-    protected trait ArrayTypeApi extends TypeApi {
-      arrayType: ArrayType =>
+    protected trait ArrayCompanionApi extends CompanionApi {
+      arrayCompanion: ArrayCompanion =>
 
       val operand0: Seq[Int]
       def shape: Seq[Int] = operand0
 
-      protected trait TypedTermApi extends TermApi with ArrayTypeApi.super.TypedTermApi {
+      protected trait TypedTermApi extends TermApi with ArrayCompanionApi.super.TypedTermApi {
         this: TypedTerm =>
         def isOutOfBound: BooleanTerm = ???
 
-        def extract(implicit debuggingInformation: Implicitly[DebuggingInformation]): elementType.TypedTerm = {
+        def extract(implicit debuggingInformation: Implicitly[DebuggingInformation]): elementCompanion.TypedTerm = {
           Extract(this)
         }
 
@@ -35,7 +35,7 @@ trait ArrayExpressions extends BooleanExpressions {
         val operand0: TypedTerm
       }
 
-      type Extract <: elementType.TypedTerm with ExtractApi
+      type Extract <: elementCompanion.TypedTerm with ExtractApi
 
       @inject
       def Extract: Operator1[TypedTerm, Extract]
@@ -57,10 +57,10 @@ trait ArrayExpressions extends BooleanExpressions {
     type ArrayTerm <: (Term with Any) with ArrayTermApi
 
     /** @template */
-    type ArrayType <: (Type with Any) with ArrayTypeApi
+    type ArrayCompanion <: (Companion with Any) with ArrayCompanionApi
 
     @inject
-    def arrayFactory: Factory2[Implicitly[DebuggingInformation], Seq[Int], ArrayType]
+    def arrayFactory: Factory2[Implicitly[DebuggingInformation], Seq[Int], ArrayCompanion]
 
     def array(dimensions: Int*)(implicit debuggingInformation: Implicitly[DebuggingInformation]) = {
       arrayFactory.newInstance(debuggingInformation, dimensions)
@@ -68,6 +68,6 @@ trait ArrayExpressions extends BooleanExpressions {
 
   }
 
-  type ValueType <: (Type with Any) with ValueTypeApi
+  type ValueCompanion <: (Companion with Any) with ValueCompanionApi
 
 }

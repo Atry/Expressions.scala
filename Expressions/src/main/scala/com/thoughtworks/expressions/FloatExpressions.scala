@@ -8,17 +8,17 @@ import com.thoughtworks.feature.Factory.inject
   */
 trait FloatExpressions extends ValueExpressions {
 
-  protected trait FloatTypeApi extends ValueTypeApi { this: FloatType =>
-    type JvmType = Float
+  protected trait FloatCompanionApi extends ValueCompanionApi { this: FloatCompanion =>
+    type JvmCompanion = Float
   }
 
   /** @template */
-  type FloatType <: (ValueType with Any) with FloatTypeApi
+  type FloatCompanion <: (ValueCompanion with Any) with FloatCompanionApi
 
   @inject
-  protected def FloatType: Factory.Factory1[DebuggingInformation, FloatType]
+  protected def FloatCompanion: Factory.Factory1[DebuggingInformation, FloatCompanion]
 
-  val float: FloatType = FloatType.newInstance(debuggingInformation)
+  val float: FloatCompanion = FloatCompanion.newInstance(debuggingInformation)
 
   type FloatTerm = float.TypedTerm
 

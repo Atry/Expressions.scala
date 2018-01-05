@@ -44,41 +44,41 @@ import scala.language.higherKinds
   */
 trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressions {
 
-  protected trait TypeApi extends super[ArrayExpressions].TypeApi with super[OpenCLBooleanExpressions].TypeApi {
-    this: Type =>
+  protected trait CompanionApi extends super[ArrayExpressions].CompanionApi with super[OpenCLBooleanExpressions].CompanionApi {
+    this: Companion =>
 
   }
 
-  type Type <: (Expression with Any) with TypeApi
-  protected trait ValueTypeApi extends TypeApi with super.ValueTypeApi { elementType: ValueType =>
+  type Companion <: (Expression with Any) with CompanionApi
+  protected trait ValueCompanionApi extends CompanionApi with super.ValueCompanionApi { elementCompanion: ValueCompanion =>
 
-    protected trait ArrayTypeApi
-        extends super.ArrayTypeApi
-        with TypeApi { arrayType: ArrayType =>
+    protected trait ArrayCompanionApi
+        extends super.ArrayCompanionApi
+        with CompanionApi { arrayCompanion: ArrayCompanion =>
 
-      override def toCode(context: Context): Type.Code = {
-        val element = context.get(elementType)
-        Type.Code(
+      override def toCode(context: Context): Companion.Code = {
+        val element = context.get(elementCompanion)
+        Companion.Code(
           globalDeclarations = Fastring.empty,
           globalDefinitions =
-            fast"typedef global ${element.packed} (* $name)${for (size <- arrayType.shape) yield fast"[$size]"};",
-          Type.Accessor.Atom(name)
+            fast"typedef global ${element.packed} (* $name)${for (size <- arrayCompanion.shape) yield fast"[$size]"};",
+          Companion.Accessor.Atom(name)
         )
       }
 
-      protected trait TypedTermApi extends ArrayTermApi with super[TypeApi].TypedTermApi with super[ArrayTypeApi].TypedTermApi {
+      protected trait TypedTermApi extends ArrayTermApi with super[CompanionApi].TypedTermApi with super[ArrayCompanionApi].TypedTermApi {
         this: TypedTerm =>
 //        def matrix: TransformationMatrix
       }
 
       type TypedTerm <: (ArrayTerm with Any) with TypedTermApi
 
-      protected trait ExtractApi extends super.ExtractApi with elementType.TypedTermApi {
-        this: elementType.TypedTerm =>
+      protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedTermApi {
+        this: elementCompanion.TypedTerm =>
         def toCode(context: Context): Term.Code = ???
       }
 
-      type Extract <: (elementType.TypedTerm with Any) with ExtractApi
+      type Extract <: (elementCompanion.TypedTerm with Any) with ExtractApi
 
       protected trait IdentifierApi extends super.IdentifierApi with TypedTermApi { this: Identifier =>
 //        def matrix: TransformationMatrix = TransformationMatrix.identity
@@ -88,9 +88,9 @@ trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressi
 
     }
 
-    type ArrayType <: (Type with Any) with ArrayTypeApi
+    type ArrayCompanion <: (Companion with Any) with ArrayCompanionApi
 
   }
-  type ValueType <: (Type with Any) with ValueTypeApi
+  type ValueCompanion <: (Companion with Any) with ValueCompanionApi
 
 }

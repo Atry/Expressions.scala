@@ -5,12 +5,12 @@ package com.thoughtworks.expressions
   */
 trait OpenCLFloatExpressions extends FloatExpressions with OpenCLExpressions {
 
-  protected trait FloatTypeApi extends super.FloatTypeApi { this: FloatType =>
-    override def toCode(context: Context): Type.Code =
-      Type.Code(accessor = Type.Accessor.Atom("float"))
+  protected trait FloatCompanionApi extends super.FloatCompanionApi { this: FloatCompanion =>
+    override def toCode(context: Context): Companion.Code =
+      Companion.Code(accessor = Companion.Accessor.Atom("float"))
 
   }
 
-  type FloatType <: (ValueType with Any) with FloatTypeApi
+  type FloatCompanion <: (ValueCompanion with Any) with FloatCompanionApi
 
 }

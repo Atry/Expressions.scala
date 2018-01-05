@@ -8,17 +8,17 @@ import com.thoughtworks.feature.Factory.{Factory1, inject}
   */
 trait BooleanExpressions extends ValueExpressions {
 
-  protected trait BooleanTypeApi extends ValueTypeApi { this: BooleanType =>
-    type JvmType = Boolean
+  protected trait BooleanCompanionApi extends ValueCompanionApi { this: BooleanCompanion =>
+    type JvmCompanion = Boolean
   }
 
   /** @template */
-  type BooleanType <: (ValueType with Any) with BooleanTypeApi
+  type BooleanCompanion <: (ValueCompanion with Any) with BooleanCompanionApi
 
   @inject
-  protected def BooleanType: Factory1[DebuggingInformation, BooleanType]
+  protected def BooleanCompanion: Factory1[DebuggingInformation, BooleanCompanion]
 
   type BooleanTerm = boolean.TypedTerm
 
-  val boolean: BooleanType = BooleanType.newInstance(debuggingInformation)
+  val boolean: BooleanCompanion = BooleanCompanion.newInstance(debuggingInformation)
 }

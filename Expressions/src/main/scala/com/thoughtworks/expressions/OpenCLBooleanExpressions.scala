@@ -5,12 +5,12 @@ package com.thoughtworks.expressions
   */
 trait OpenCLBooleanExpressions extends OpenCLExpressions with BooleanExpressions {
 
-  protected trait BooleanTypeApi extends super.BooleanTypeApi { this: BooleanType =>
-    override def toCode(context: Context): Type.Code =
-      Type.Code(accessor = Type.Accessor.Atom("bool"))
+  protected trait BooleanCompanionApi extends super.BooleanCompanionApi { this: BooleanCompanion =>
+    override def toCode(context: Context): Companion.Code =
+      Companion.Code(accessor = Companion.Accessor.Atom("bool"))
 
   }
 
-  type BooleanType <: (ValueType with Any) with BooleanTypeApi
+  type BooleanCompanion <: (ValueCompanion with Any) with BooleanCompanionApi
 
 }

@@ -16,7 +16,7 @@ import shapeless.{Nat, Sized}
 trait OpenCLExpressions extends ValueExpressions with FreshNames {
 
   trait Parameter {
-    def `type`: Type
+    def `type`: Companion
     def name: String
   }
 
@@ -26,7 +26,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
 
     val globalDeclarations = mutable.Buffer.empty[Fastring]
     val globalDefinitions = mutable.Buffer.empty[Fastring]
-    val typeCodeCache = mutable.HashMap.empty[Type, Type.Accessor]
+    val typeCodeCache = mutable.HashMap.empty[Companion, Companion.Accessor]
 
     val exportedFunction = {
 
@@ -35,7 +35,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
       val expressionCodeCache = new IdentityHashMap[Term, Term.Accessor]().asScala
       val functionContext = new Context {
 
-        override def get(`type`: Type): Type.Accessor = {
+        override def get(`type`: Companion): Companion.Accessor = {
           typeCodeCache.getOrElseUpdate(`type`, {
             val code = `type`.toCode(this)
             globalDeclarations += code.globalDeclarations
@@ -64,10 +64,10 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
       }
 
       val output = functionContext.get(rhs).packed
-      val outputType = functionContext.get(rhs.`type`).packed
+      val outputCompanion = functionContext.get(rhs.`type`).packed
 
       fastraw"""
-        kernel void $functionName(${parameterDeclarations.mkFastring(", ")}, global $outputType *__output) {
+        kernel void $functionName(${parameterDeclarations.mkFastring(", ")}, global $outputCompanion *__output) {
           ${localDefinitions.mkFastring}
 
           // TODO: polyfill for get_global_linear_id
@@ -84,7 +84,7 @@ ${exportedFunction}
 
   trait Context {
     def get(term: Term): Term.Accessor
-    def get(`type`: Type): Type.Accessor
+    def get(`type`: Companion): Companion.Accessor
   }
 
   protected type TermCompanion <: TermCompanionApi
@@ -164,9 +164,9 @@ ${exportedFunction}
   }
   protected type TypeCompanion <: TypeCompanionApi
 
-  protected trait TypeApi extends super.TypeApi { this: Type =>
+  protected trait CompanionApi extends super.CompanionApi { this: Companion =>
 
-    def toCode(context: Context): Type.Code
+    def toCode(context: Context): Companion.Code
 
     protected trait TypedTermApi extends TermApi with super.TypedTermApi {}
 
@@ -185,6 +185,6 @@ ${exportedFunction}
 
   }
 
-  type Type <: (Expression with Any) with TypeApi
+  type Companion <: (Expression with Any) with CompanionApi
 
 }
