@@ -26,16 +26,16 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
 
     val globalDeclarations = mutable.Buffer.empty[Fastring]
     val globalDefinitions = mutable.Buffer.empty[Fastring]
-    val typeCodeCache = mutable.HashMap.empty[Companion, Companion.Accessor]
+    val typeCodeCache = mutable.HashMap.empty[Companion, NativeType.Accessor]
 
     val exportedFunction = {
 
       val localDefinitions = mutable.Buffer.empty[Fastring]
 
-      val expressionCodeCache = new IdentityHashMap[Expression, Expression.Accessor]().asScala
+      val expressionCodeCache = new IdentityHashMap[Expression, NativeTerm.Accessor]().asScala
       val functionContext = new Context {
 
-        override def get(`type`: Companion): Companion.Accessor = {
+        override def get(`type`: Companion): NativeType.Accessor = {
           typeCodeCache.getOrElseUpdate(`type`, {
             val code = `type`.toCode(this)
             globalDeclarations += code.globalDeclarations
@@ -44,7 +44,7 @@ trait OpenCLExpressions extends ValueExpressions with FreshNames {
           })
         }
 
-        override def get(expression: Expression): Expression.Accessor = {
+        override def get(expression: Expression): NativeTerm.Accessor = {
           expressionCodeCache.getOrElseUpdate(
             expression, {
               val code = expression.toCode(this)
@@ -83,12 +83,11 @@ ${exportedFunction}
   }
 
   trait Context {
-    def get(term: Expression): Expression.Accessor
-    def get(`type`: Companion): Companion.Accessor
+    def get(term: Expression): NativeTerm.Accessor
+    def get(`type`: Companion): NativeType.Accessor
   }
 
-  protected type ExpressionCompanion <: ExpressionCompanionApi
-  protected trait ExpressionCompanionApi {
+  object NativeTerm {
 
     final case class Code(globalDeclarations: Fastring = Fastring.empty,
                           globalDefinitions: Fastring = Fastring.empty,
@@ -128,12 +127,12 @@ ${exportedFunction}
   }
 
   protected trait ExpressionApi extends NamedApi with super.ExpressionApi {
-    def toCode(context: Context): Expression.Code
+    def toCode(context: Context): NativeTerm.Code
   }
 
   type Expression <: (Named with Any) with ExpressionApi
 
-  protected trait TypeCompanionApi {
+  object NativeType  {
 
     trait Accessor {
       def packed: Fastring
@@ -162,11 +161,10 @@ ${exportedFunction}
                           accessor: Accessor)
 
   }
-  protected type TypeCompanion <: TypeCompanionApi
 
   protected trait CompanionApi extends super.CompanionApi { this: Companion =>
 
-    def toCode(context: Context): Companion.Code
+    def toCode(context: Context): NativeType.Code
 
     protected trait TypedExpressionApi extends ExpressionApi with super.TypedExpressionApi {}
 
@@ -176,8 +174,8 @@ ${exportedFunction}
     protected trait IdentifierApi extends Parameter with ExpressionApi { this: Identifier =>
       // TODO:
 
-      def toCode(context: Context): Expression.Code = {
-        Expression.Code(accessor = Expression.Accessor.Packed(fast"$name", context.get(`type`).unpacked.length))
+      def toCode(context: Context): NativeTerm.Code = {
+        NativeTerm.Code(accessor = NativeTerm.Accessor.Packed(fast"$name", context.get(`type`).unpacked.length))
       }
     }
 

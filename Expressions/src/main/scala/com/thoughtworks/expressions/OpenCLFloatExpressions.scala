@@ -6,8 +6,8 @@ package com.thoughtworks.expressions
 trait OpenCLFloatExpressions extends FloatExpressions with OpenCLExpressions {
 
   protected trait FloatCompanionApi extends super.FloatCompanionApi { this: FloatCompanion =>
-    override def toCode(context: Context): Companion.Code =
-      Companion.Code(accessor = Companion.Accessor.Atom("float"))
+    override def toCode(context: Context): NativeType.Code =
+      NativeType.Code(accessor = NativeType.Accessor.Atom("float"))
 
   }
 

@@ -56,13 +56,13 @@ trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressi
         extends super.ArrayCompanionApi
         with CompanionApi { arrayCompanion: ArrayCompanion =>
 
-      override def toCode(context: Context): Companion.Code = {
+      override def toCode(context: Context): NativeType.Code = {
         val element = context.get(elementCompanion)
-        Companion.Code(
+        NativeType.Code(
           globalDeclarations = Fastring.empty,
           globalDefinitions =
             fast"typedef global ${element.packed} (* $name)${for (size <- arrayCompanion.shape) yield fast"[$size]"};",
-          Companion.Accessor.Atom(name)
+          NativeType.Accessor.Atom(name)
         )
       }
 
@@ -75,7 +75,7 @@ trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressi
 
       protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedExpressionApi {
         this: elementCompanion.TypedExpression =>
-        def toCode(context: Context): Expression.Code = ???
+        def toCode(context: Context): NativeTerm.Code = ???
       }
 
       type Extract <: (elementCompanion.TypedExpression with Any) with ExtractApi

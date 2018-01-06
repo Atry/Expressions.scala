@@ -6,8 +6,8 @@ package com.thoughtworks.expressions
 trait OpenCLBooleanExpressions extends OpenCLExpressions with BooleanExpressions {
 
   protected trait BooleanCompanionApi extends super.BooleanCompanionApi { this: BooleanCompanion =>
-    override def toCode(context: Context): Companion.Code =
-      Companion.Code(accessor = Companion.Accessor.Atom("bool"))
+    override def toCode(context: Context): NativeType.Code =
+      NativeType.Code(accessor = NativeType.Accessor.Atom("bool"))
 
   }
 
