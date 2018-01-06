@@ -23,21 +23,21 @@ class ExpressionsSpec extends FreeSpec with Matchers {
     println(sourceCode) // FIXME: replace println to a scalatest assertion
 
   }
-
-  "id" ignore {
-
-    val hyperparameters = Factory[BuiltIns].newInstance()
-
-    import hyperparameters._
-
-    val floatArray3d = float.array(32, 32, 32)
-
-    val x: floatArray3d.Identifier = floatArray3d.Identifier()
-
-    val sourceCode = generateOpenCLKernelSourceCode("id", Seq(x), x.extract).mkString
-
-    println(sourceCode) // FIXME: replace println to a scalatest assertion
-
-  }
+//
+//  "id" ignore {
+//
+//    val hyperparameters = Factory[BuiltIns].newInstance()
+//
+//    import hyperparameters._
+//
+//    val floatArray3d = float.array(32, 32, 32)
+//
+//    val x: floatArray3d.Identifier = floatArray3d.Identifier()
+//
+//    val sourceCode = generateOpenCLKernelSourceCode("id", Seq(x), x.extract).mkString
+//
+//    println(sourceCode) // FIXME: replace println to a scalatest assertion
+//
+//  }
 
 }

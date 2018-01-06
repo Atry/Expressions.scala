@@ -53,33 +53,7 @@ trait Expressions extends Debugging {
         implicit debuggingInformation: Implicitly[DebuggingInformation]): Out
   }
 
-  protected trait ExpressionApi {
-    val `type`: Companion
-  }
-
   /** @template */
-  type Expression <: (Named with Any) with ExpressionApi
-
-  protected trait CompanionApi extends NamedApi { this: Companion =>
-
-    protected trait TypedExpressionApi extends ExpressionApi {
-      val `type`: CompanionApi.this.type = CompanionApi.this
-    }
-
-    type TypedExpression <: (Expression with Any) with TypedExpressionApi
-
-    /** @template */
-    type Identifier <: TypedExpression
-
-    // FIXME: Some identifiers need additional settings,
-    // so the arity may be not nullary,
-    // and this method will be removed then.
-    @inject
-    def Identifier: Operator0[Identifier]
-
-  }
-
-  /** @template */
-  type Companion <: (Named with Any) with CompanionApi // TODO: Rename to Companion
+  type Expression <: Named
 
 }

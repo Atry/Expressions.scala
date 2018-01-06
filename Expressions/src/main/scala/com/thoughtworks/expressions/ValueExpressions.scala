@@ -8,11 +8,23 @@ import com.thoughtworks.feature.Factory.inject
   */
 trait ValueExpressions extends Expressions {
 
-  protected trait ValueCompanionApi extends CompanionApi { this: ValueCompanion =>
+  protected trait ValueCompanionApi { this: ValueCompanion =>
     type JvmCompanion
+
+    type TypedExpression <: Expression
+
+    /** @template */
+    type Identifier <: TypedExpression
+
+    // FIXME: Some identifiers need additional settings,
+    // so the arity may be not nullary,
+    // and this method will be removed then.
+    @inject
+    def Identifier: Operator0[Identifier]
+
   }
 
   /** @template */
-  type ValueCompanion <: (Companion with Any) with ValueCompanionApi
+  type ValueCompanion <: (Named with Any) with ValueCompanionApi
 
 }

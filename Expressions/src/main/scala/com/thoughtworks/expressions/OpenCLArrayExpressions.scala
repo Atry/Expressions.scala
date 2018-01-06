@@ -43,54 +43,57 @@ import scala.language.higherKinds
   * @author 杨博 (Yang Bo)
   */
 trait OpenCLArrayExpressions extends ArrayExpressions with OpenCLBooleanExpressions {
-
-  protected trait CompanionApi extends super[ArrayExpressions].CompanionApi with super[OpenCLBooleanExpressions].CompanionApi {
-    this: Companion =>
-
+//
+//  protected trait CompanionApi extends super[ArrayExpressions].CompanionApi with super[OpenCLBooleanExpressions].CompanionApi {
+//    this: Companion =>
+//
+//  }
+//
+//  type Companion <: (Named with Any) with CompanionApi
+  protected trait ValueCompanionApi
+      extends super[OpenCLBooleanExpressions].ValueCompanionApi
+      with super[ArrayExpressions].ValueCompanionApi { elementCompanion: ValueCompanion =>
+//
+//    protected trait ArrayCompanionApi
+//        extends super.ArrayCompanionApi
+//        with CompanionApi { arrayCompanion: ArrayCompanion =>
+//
+//      override def toCode(context: Context): NativeType.Code = {
+//        val element = context.get(elementCompanion)
+//        NativeType.Code(
+//          globalDeclarations = Fastring.empty,
+//          globalDefinitions =
+//            fast"typedef global ${element.packed} (* $name)${for (size <- arrayCompanion.shape) yield fast"[$size]"};",
+//          NativeType.Accessor.Atom(name)
+//        )
+//      }
+//
+//
+//      protected trait TypedExpressionApi extends ArrayExpressionApi with super[CompanionApi].TypedExpressionApi with super[ArrayCompanionApi].TypedExpressionApi {
+//        this: TypedExpression =>
+////        def matrix: TransformationMatrix
+//      }
+//
+//      type TypedExpression <: (ArrayExpression with Any) with TypedExpressionApi
+//
+//      protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedExpressionApi {
+//        this: elementCompanion.TypedExpression =>
+//        def toCode(context: Context): NativeTerm.Code = ???
+//      }
+//
+//      type Extract <: (elementCompanion.TypedExpression with Any) with ExtractApi
+//
+//      protected trait IdentifierApi extends super.IdentifierApi with TypedExpressionApi { this: Identifier =>
+////        def matrix: TransformationMatrix = TransformationMatrix.identity
+//      }
+//
+//      type Identifier <: (TypedExpression with Any) with IdentifierApi
+//
+//    }
+//
+//    type ArrayCompanion <: (Companion with Any) with ArrayCompanionApi
+//
   }
-
-  type Companion <: (Named with Any) with CompanionApi
-  protected trait ValueCompanionApi extends CompanionApi with super.ValueCompanionApi { elementCompanion: ValueCompanion =>
-
-    protected trait ArrayCompanionApi
-        extends super.ArrayCompanionApi
-        with CompanionApi { arrayCompanion: ArrayCompanion =>
-
-      override def toCode(context: Context): NativeType.Code = {
-        val element = context.get(elementCompanion)
-        NativeType.Code(
-          globalDeclarations = Fastring.empty,
-          globalDefinitions =
-            fast"typedef global ${element.packed} (* $name)${for (size <- arrayCompanion.shape) yield fast"[$size]"};",
-          NativeType.Accessor.Atom(name)
-        )
-      }
-
-      protected trait TypedExpressionApi extends ArrayExpressionApi with super[CompanionApi].TypedExpressionApi with super[ArrayCompanionApi].TypedExpressionApi {
-        this: TypedExpression =>
-//        def matrix: TransformationMatrix
-      }
-
-      type TypedExpression <: (ArrayExpression with Any) with TypedExpressionApi
-
-      protected trait ExtractApi extends super.ExtractApi with elementCompanion.TypedExpressionApi {
-        this: elementCompanion.TypedExpression =>
-        def toCode(context: Context): NativeTerm.Code = ???
-      }
-
-      type Extract <: (elementCompanion.TypedExpression with Any) with ExtractApi
-
-      protected trait IdentifierApi extends super.IdentifierApi with TypedExpressionApi { this: Identifier =>
-//        def matrix: TransformationMatrix = TransformationMatrix.identity
-      }
-
-      type Identifier <: (TypedExpression with Any) with IdentifierApi
-
-    }
-
-    type ArrayCompanion <: (Companion with Any) with ArrayCompanionApi
-
-  }
-  type ValueCompanion <: (Companion with Any) with ValueCompanionApi
+  type ValueCompanion <: (Named with Any) with ValueCompanionApi
 
 }
