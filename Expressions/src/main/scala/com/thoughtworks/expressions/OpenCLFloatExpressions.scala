@@ -7,7 +7,7 @@ import com.thoughtworks.expressions.OpenCLExpressions._
 /**
   * @author 杨博 (Yang Bo)
   */
-trait OpenCLFloatExpressions extends FloatExpressions with OpenCLExpressions {
+trait OpenCLFloatExpressions extends FloatAsts with OpenCLExpressions {
 
   protected trait FloatTypeApi extends super.FloatTypeApi with super[OpenCLExpressions].ValueTypeApi {
     this: FloatType =>

@@ -3,7 +3,7 @@ package com.thoughtworks.expressions
 /**
   * @author 杨博 (Yang Bo)
   */
-trait DifferentiableFloatExpressions extends FloatExpressions with DifferentiableValueExpressions {
+trait DifferentiableFloatExpressions extends FloatAsts with DifferentiableValueExpressions {
   protected trait FloatTypeApi extends super.FloatTypeApi { this: FloatType =>
     val deltaType: this.type = this
 

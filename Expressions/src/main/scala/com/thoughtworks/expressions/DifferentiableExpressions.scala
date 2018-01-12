@@ -6,7 +6,7 @@ import scala.language.existentials
 /**
   * @author 杨博 (Yang Bo)
   */
-trait DifferentiableExpressions extends Expressions {
+trait DifferentiableExpressions extends Asts {
 
   protected trait TermApi extends super.TermApi {
     type DeltaTerm = `type`.deltaType.TypedTerm

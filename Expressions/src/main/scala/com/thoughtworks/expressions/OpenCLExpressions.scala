@@ -173,7 +173,7 @@ ${exportedFunction}
 /**
   * @author 杨博 (Yang Bo)
   */
-trait OpenCLExpressions extends ValueExpressions with FreshNames {
+trait OpenCLExpressions extends ValueAsts with FreshNames {
   import OpenCLExpressions._
 
   protected trait TermApi extends OpenCLTerm with super[FreshNames].ExpressionApi with super.TermApi

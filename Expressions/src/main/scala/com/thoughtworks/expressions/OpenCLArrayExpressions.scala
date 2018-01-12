@@ -43,9 +43,9 @@ import OpenCLExpressions._
 /**
   * @author 杨博 (Yang Bo)
   */
-trait OpenCLArrayExpressions extends OpenCLBooleanExpressions with ArrayExpressions {
+trait OpenCLArrayExpressions extends OpenCLBooleanExpressions with ArrayAsts {
 
-  protected trait TypeApi extends super[ArrayExpressions].TypeApi with super[OpenCLBooleanExpressions].TypeApi {
+  protected trait TypeApi extends super[ArrayAsts].TypeApi with super[OpenCLBooleanExpressions].TypeApi {
     this: Type =>
 
   }
@@ -53,7 +53,7 @@ trait OpenCLArrayExpressions extends OpenCLBooleanExpressions with ArrayExpressi
   type Type <: (Expression with Any) with TypeApi
 
   protected trait ValueTypeApi
-      extends super[ArrayExpressions].ValueTypeApi
+      extends super[ArrayAsts].ValueTypeApi
       with super[OpenCLBooleanExpressions].ValueTypeApi { elementType: ValueType =>
 
     protected trait ExtractFromArrayBufferApi extends super.ExtractFromArrayBufferApi { this: ExtractFromArrayBuffer =>

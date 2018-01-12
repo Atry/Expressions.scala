@@ -5,7 +5,7 @@ import com.thoughtworks.expressions.OpenCLExpressions._
 /**
   * @author 杨博 (Yang Bo)
   */
-trait OpenCLBooleanExpressions extends OpenCLExpressions with BooleanExpressions {
+trait OpenCLBooleanExpressions extends OpenCLExpressions with BooleanAsts {
 
   protected trait BooleanTypeApi extends super.BooleanTypeApi { this: BooleanType =>
     def toCode(context: OpenCLContext): OpenCLType.Code =

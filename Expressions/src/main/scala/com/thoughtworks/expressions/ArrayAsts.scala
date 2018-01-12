@@ -9,7 +9,7 @@ import scala.language.higherKinds
 /**
   * @author 杨博 (Yang Bo)
   */
-trait ArrayExpressions extends BooleanExpressions {
+trait ArrayAsts extends BooleanAsts {
   protected trait ValueTermApi extends TermApi { valueTerm: ValueTerm =>
     def filled(implicit debuggingInformation: Implicitly[DebuggingInformation])
       : ArrayFillTerm { type ElementTerm = valueTerm.Self }
@@ -84,7 +84,7 @@ trait ArrayExpressions extends BooleanExpressions {
     }
     type Filled <: (TypedTerm with Any) with FilledApi
 
-    @inject protected[ArrayExpressions] def Filled
+    @inject protected[ArrayAsts] def Filled
       : Factory2[Implicitly[DebuggingInformation], operand0.TypedTerm, Filled]
 
   }

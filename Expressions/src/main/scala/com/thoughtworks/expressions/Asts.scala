@@ -7,7 +7,7 @@ import shapeless.Lazy
 /**
   * @author 杨博 (Yang Bo)
   */
-trait Expressions {
+trait Asts {
 
   object Operator0 {
     implicit def operator0[Out](implicit factory: Factory1[Implicitly[DebuggingInformation], Out]): Operator0[Out] =
