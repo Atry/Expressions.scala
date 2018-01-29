@@ -6,8 +6,30 @@ import com.thoughtworks.expressions.opencl.Context.ClTypeDefinition.{ArrayDefini
 import com.thoughtworks.feature.Factory.{Factory1, Factory2, Factory3, Lt, inject}
 import org.apache.commons.math3.linear.{MatrixUtils, RealMatrix}
 
+import scala.annotation.tailrec
 import scala.collection.mutable
 object Context {
+
+  def transform(vector: Seq[Double], matrix: RealMatrix): Seq[Double] = {
+    val output = Array.ofDim[Double](matrix.getRowDimension)
+    @tailrec
+    def rowLoop(y: Int): Unit = {
+      if (y < output.length) {
+        @tailrec
+        def columnLoop(accumulator: Double, x: Int): Unit = {
+          if (x < matrix.getColumnDimension) {
+            columnLoop(matrix.getEntry(y, x) * vector(x) + accumulator, x + 1)
+          } else {
+            output(y) = accumulator + matrix.getEntry(y, x)
+          }
+        }
+        columnLoop(0.0, 0)
+        rowLoop(y + 1)
+      }
+    }
+    rowLoop(0)
+    output
+  }
 
   type ClTermCode = String
   type ClTypeCode = String
